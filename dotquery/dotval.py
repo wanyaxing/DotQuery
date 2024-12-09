@@ -129,8 +129,12 @@ class DotVal():
 
     # 占比
     # CONCAT(ROUND(分子/分母*100,2),'%')
-    def rateof(self,dividend,digits=2,suffix='%'):
-        return self.div(dividend).times(100).to_fixed(digits).suffix(suffix)
+    def rateof(self,target,digits=2,suffix='%'):
+        return self.div(target).times(100).to_fixed(digits).suffix(suffix)
+
+    # 环比（差值占比）
+    def diffof(self,target,digits=2,suffix='%'):
+        return (self - target).rateof(target).prefix('+')
 
     # 字符截取
     # 注意，此处返回的是字符串
@@ -178,6 +182,7 @@ class DotVal():
 
     # 打印数据时，将根据数值动态决定小数点（如果>99or<1则取1位，否则0位）
     def to_special(self, isspecial=True):
+        self._digits=None
         self._isspecial=isspecial
         return self
 
