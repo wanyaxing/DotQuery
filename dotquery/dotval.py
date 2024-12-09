@@ -5,6 +5,7 @@ class DotVal():
     _digits=None
     _suffix=''
     _prefix=None
+    _isspecial=False
     def __init__(self, value):
         self._value=value
 
@@ -30,6 +31,13 @@ class DotVal():
         if self._digits is not None:
             rounded_num=round(_value, self._digits)
             _value=f"{rounded_num:.{self._digits}f}"
+        elif self._isspecial:
+            if abs(float(_value))>99 or abs(float(_value))<1:
+                rounded_num=round(_value, 1)
+                _value=f"{rounded_num:.1f}"
+            else:
+                rounded_num=round(_value, 0)
+                _value=f"{rounded_num:.0f}"
 
         if self._prefix is not None and float(_value)>=0:
             return f"{self._prefix}{_value}{self._suffix}"
@@ -166,6 +174,11 @@ class DotVal():
     # 打印数据时，将保留若干小数位，
     def to_fixed(self, digits=None):
         self._digits=digits
+        return self
+
+    # 打印数据时，将根据数值动态决定小数点（如果>99or<1则取1位，否则0位）
+    def to_special(self, isspecial=True):
+        self._isspecial=isspecial
         return self
 
     # 打印数据时，追加后缀字符
