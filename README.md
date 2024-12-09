@@ -111,6 +111,7 @@ WHERE `create_time` BETWEEN '{target_day}' AND '{target_day} 23:59:59'
     □ 支持共用代码块替换，如$<user_table>可以替换为共用的代码块
     □ 支持.sql文件
     □ 支持请求API获得数据
+    □ 支持多层嵌套的数据中进行路径搜索(通常用于API请求获得的JSON体)，如 result.find('order.price') 或 result.search('*.price')
     □ .sql文件支持变体，如神策请求
     □ 支持数据导出为csv/excel/html
     □ 支持数据流式查询和处理
