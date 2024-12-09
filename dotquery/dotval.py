@@ -130,10 +130,10 @@ class DotVal():
     # 占比
     # CONCAT(ROUND(分子/分母*100,2),'%')
     def rateof(self,target,digits=2,suffix='%'):
-        return self.div(target).times(100).to_fixed(digits).suffix(suffix)
+        return self.copy().div(target).times(100).to_fixed(digits).suffix(suffix)
 
     # 环比（差值占比）
-    def diffof(self,target,digits=2,suffix='%'):
+    def diffof(self,target):
         return (self - target).rateof(target).prefix('+')
 
     # 字符截取
