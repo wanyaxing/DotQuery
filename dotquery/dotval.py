@@ -182,7 +182,8 @@ class DotVal():
 
     # 打印数据时，将根据数值动态决定小数点（如果>99or<1则取1位，否则0位）
     def to_special(self, isspecial=True):
-        self._digits=None
+        if isspecial:
+            self._digits=None
         self._isspecial=isspecial
         return self
 

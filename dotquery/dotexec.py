@@ -4,7 +4,9 @@ class DotExec():
     _conn=None
     _method=None
     _default=None
-
+    _digits=None
+    _isspecial=False
+    
     def __init__(self, conn, method):
         self._conn=conn
         self._method=method
@@ -39,9 +41,19 @@ class DotExec():
             # res.append(DotRes(row_dict).val_if_none(self._default))
             res.append(row_dict)
         cursor.close()
-        return DotRes(res).val_if_none(self._default)
+        return DotRes(res).val_if_none(self._default).to_fixed(self._digits).to_special(self._isspecial)
 
     # 指定vin值，当查询结果的DotRes被外界调用时，此处可以指定默认值
     def val_if_none(self,default):
         self._default=default
+        return self
+
+    # 打印数据时，将保留若干小数位，
+    def to_fixed(self, digits=None):
+        self._digits=digits
+        return self
+
+    # 打印数据时，将根据数值动态决定小数点（如果>99or<1则取1位，否则0位）
+    def to_special(self, isspecial=True):
+        self._isspecial=isspecial
         return self
