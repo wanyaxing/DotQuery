@@ -106,6 +106,9 @@ WHERE `create_time` BETWEEN '{target_day}' AND '{target_day} 23:59:59'
 ## todo
 
     √ 基础功能：实现自动关联执行sql脚本、支持查询结果对象的若干点语法（基础的数学计算、转换、判断能力
+    □ 支持常量替换，如$[yyyy-mm-dd]可以替换为日期
+    □ 支持变量替换，如${target_day}可以替换为参数的值
+    □ 支持共用代码块替换，如$<user_table>可以替换为共用的代码块
     □ 支持数据导出为csv/excel/html
     □ 支持数据流式查询和处理
     □ ...
