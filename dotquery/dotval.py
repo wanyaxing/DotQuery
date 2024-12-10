@@ -20,18 +20,19 @@ class DotVal():
 
     # 魔法方法，核心方法，当打印数据时调用此处
     def __str__(self):
+        return f"{self}"
+
+    # 魔法方法，核心方法，当格式化文本时调用此处
+    def __format__(self, format_spec=None):
         if self._value is None:
-
             if self._default is not None:
-                return f"{self._default}"
-
-            if self._raiseIfNone is not None:
+                _value=f"{self._default}"
+            elif self._raiseIfNone is not None:
                 raise ValueError(self._raiseIfNone)
-
-        _value=f"{self._value}"
+        else:
+            _value=f"{self._value}"
 
         if re.match(r"^\d+(\.\d+)?$", _value):
-            print(self._digits,self._isspecial)
             if self._digits is not None:
                 rounded_num=round(float(_value), self._digits)
                 _value=f"{rounded_num:.{self._digits}f}"
@@ -43,11 +44,12 @@ class DotVal():
                     rounded_num=round(float(_value), 0)
                     _value=f"{rounded_num:.0f}"
 
-        if self._prefix is not None and float(_value)>=0:
-            return f"{self._prefix}{_value}{self._suffix}"
+        _value= f"{_value}{self._suffix}"
 
-        return f"{_value}{self._suffix}"
+        if self._prefix is not None and _value[0:1]!='-':
+            _value= f"{self._prefix}{_value}"
 
+        return _value.__format__(format_spec)
 
     # ------------异常处理------------
 
