@@ -1,3 +1,4 @@
+import os
 from .dotres import DotRes
 
 class DotExec():
@@ -13,15 +14,25 @@ class DotExec():
 
     # 执行方法获得SQL并查询结果
     def run(self, *args, **kwargs):
-        try:
-            _result = self._method(*args, **kwargs)
-        except ImportError:
-            raise ValueError(f"DotExec: try to run method failed.")
+        if type(self._method) is str:
+            if os.path.exists(self._method):
+                _result = self._sql_prepare(*args)
+            else:
+                _result = self._method
+        else:
+            try:
+                _result = self._method(*args, **kwargs)
+            except ImportError:
+                raise ValueError(f"DotExec: try to run method failed.")
         if type(_result) is tuple:
             return self.query(_result[0],_result[1])
         else:
             return self.query(_result)
 
+    def _sql_prepare(self,params=[]):
+        with open(self._method, 'r') as f:
+            content = f.read()
+        return content
     
     # 返回的结果中，取第一条
     def query_single(self,sql):

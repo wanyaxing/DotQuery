@@ -29,3 +29,7 @@ if __name__ == '__main__':
     user_count2=dq.user_count('2024-12-08')
     print("最后注册时间　　:{:>10}".format(user_count2.最后注册时间))
     print("环比前日　　　　:{:>10}".format(user_count2.新注册用户.minus(user_count.新注册用户).prefix('+').to_fixed(0)))
+
+    today_user=dq.today_user()
+    print("最后注册时间　　:{:>10}".format(today_user.最后注册时间))
+    print("环比前日　　　　:{:>10}".format(today_user.新注册用户.minus(user_count.新注册用户).prefix('+').to_fixed(0)))

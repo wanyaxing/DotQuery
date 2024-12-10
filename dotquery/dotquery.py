@@ -30,6 +30,13 @@ class DotQuery():
         )
 
     def __getattr__(self, method_name):
+
+        if os.path.exists(f"{self._sqls_path}/{method_name}.py"):
+            return self._get_model_method(method_name)
+        elif os.path.exists(f"{self._sqls_path}/{method_name}.sql"):
+            return self._get_sql_method(method_name)
+
+    def _get_model_method(self, method_name):
         # 动态导入文件.py模块
         try:
             spec = importlib.util.spec_from_file_location(method_name,f"{self._sqls_path}/{method_name}.py")
@@ -46,6 +53,11 @@ class DotQuery():
 
         # 包装成DotExec对象的run方法（注意，不是run()，所以当执行时，等同于执行run)
         return DotExec(self._conn,target_method).val_if_none(self._default).to_fixed(self._digits).to_special(self._isspecial).run
+
+
+    def _get_sql_method(self, method_name):
+        # 包装成DotExec对象的run方法（注意，不是run()，所以当执行时，等同于执行run)
+        return DotExec(self._conn,f"{self._sqls_path}/{method_name}.sql").val_if_none(self._default).to_fixed(self._digits).to_special(self._isspecial).run
 
 
     # 指定vin值，当查询结果的DotDict被外界调用时，此处可以指定默认值
