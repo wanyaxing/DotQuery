@@ -19,7 +19,7 @@ def paramat_get(s, key="", default=None):
 
 
 def replace_and_tuple(sql, params={}, sqls_path=None):
-    new_sql = sql
+    new_sql = str(sql)
     new_sql = _params_replace(new_sql, params)
 
     if sqls_path is not None:
@@ -85,7 +85,7 @@ def _part_replace(sql, sqls_path):
 def _params_replace(sql, params={}):
     new_sql = sql
     for key, value in params.items():
-        value = _constant_replace(value)
+        value = _constant_replace(str(value))
         new_sql = new_sql.replace(f"${{{key}}}", value)
         if f"{value}" != "0":
             new_sql = re.sub(

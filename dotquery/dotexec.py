@@ -19,7 +19,8 @@ class DotExec:
     # 执行方法获得SQL并查询结果
     def run(self, *args, **kwargs):
         if type(self._method) is str:
-            _result = self._sql_prepare(*args)
+            _result = self._sql_prepare(*args, **kwargs)
+            # print(_result) # debug of sql
         else:
             try:
                 _result = self._method(*args, **kwargs)
@@ -30,12 +31,18 @@ class DotExec:
         else:
             return self.query(_result)
 
-    def _sql_prepare(self, params={}):
+    def _sql_prepare(self, *args, **kwargs):
         if os.path.exists(self._method):
             with open(self._method, "r") as f:
                 sql = f.read()
         else:
             sql = self._method
+        params = {}
+        for arg in args:
+            if type(arg) is dict:
+                params.update(arg)
+        params.update(kwargs)
+
         defaultstr = dottool.paramat_get(sql, "default")
         if defaultstr is not None:
             key_value_pairs = defaultstr.split("&")

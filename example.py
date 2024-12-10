@@ -49,12 +49,13 @@ if __name__ == "__main__":
     )
 
     # 支持.sql 以及支持传参进行替换（详见sqls/today_user.sql)
+    # 可以传参list
     today_user = dq.today_user({"target_day": "2024-12-10", "gender": "FEMALE"})
     print("最后注册时间　　:{:>10}".format(today_user.最后注册时间))
     print("是否包含最新用户　　:{:>10}".format(today_user.是否包含最新用户))
 
-    # 如果不传参数，.sql中的@default中的默认参数就会生效
-    today_user2 = dq.today_user()
+    # 也可以直接单参指定
+    today_user2 = dq.today_user(target_day="2024-12-07")
     print("最后注册时间　　:{:>10}".format(today_user2.最后注册时间))
     print("是否包含最新用户　　:{:>10}".format(today_user2.是否包含最新用户))
     print(
@@ -62,6 +63,20 @@ if __name__ == "__main__":
             today_user2.男性用户.div(today_user2.新注册用户),
             user_count2.男性用户.div(user_count2.新注册用户),
             today_user2.男性用户.div(today_user2.新注册用户).diffof(
+                user_count2.男性用户.div(user_count2.新注册用户)
+            ),
+        )
+    )
+
+    # 如果不传参数，.sql中的@default中的默认参数就会生效
+    today_user3 = dq.today_user()
+    print("最后注册时间　　:{:>10}".format(today_user3.最后注册时间))
+    print("是否包含最新用户　　:{:>10}".format(today_user3.是否包含最新用户))
+    print(
+        "男性用户/新注册用户　　:{}|{}({})".format(
+            today_user3.男性用户.div(today_user3.新注册用户),
+            user_count2.男性用户.div(user_count2.新注册用户),
+            today_user3.男性用户.div(today_user3.新注册用户).diffof(
                 user_count2.男性用户.div(user_count2.新注册用户)
             ),
         )
