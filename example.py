@@ -50,7 +50,7 @@ if __name__ == "__main__":
         )
     )
 
-    today_user = dq.today_user()
+    today_user = dq.today_user({"target_day": "2024-12-10", "gender": "FEMALE"})
     print("最后注册时间　　:{:>10}".format(today_user.最后注册时间))
     print(
         "环比前日　　　　:{:>10}".format(

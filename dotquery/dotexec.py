@@ -1,5 +1,6 @@
 import os
 from .dotres import DotRes
+from . import dottool
 
 
 class DotExec:
@@ -16,10 +17,8 @@ class DotExec:
     # 执行方法获得SQL并查询结果
     def run(self, *args, **kwargs):
         if type(self._method) is str:
-            if os.path.exists(self._method):
-                _result = self._sql_prepare(*args)
-            else:
-                _result = self._method
+            _result = self._sql_prepare(*args)
+            print(_result)
         else:
             try:
                 _result = self._method(*args, **kwargs)
@@ -30,10 +29,13 @@ class DotExec:
         else:
             return self.query(_result)
 
-    def _sql_prepare(self, params=[]):
-        with open(self._method, "r") as f:
-            content = f.read()
-        return content
+    def _sql_prepare(self, params={}):
+        if os.path.exists(self._method):
+            with open(self._method, "r") as f:
+                content = f.read()
+        else:
+            content = self._method
+        return dottool.replace_and_tuple(content, params)
 
     # 返回的结果中，取第一条
     def query_single(self, sql):
