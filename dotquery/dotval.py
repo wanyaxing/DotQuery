@@ -1,3 +1,5 @@
+import re
+
 class DotVal():
     _value=None
     _default=None
@@ -26,18 +28,20 @@ class DotVal():
             if self._raiseIfNone is not None:
                 raise ValueError(self._raiseIfNone)
 
-        _value=self._value
+        _value=f"{self._value}"
 
-        if self._digits is not None:
-            rounded_num=round(_value, self._digits)
-            _value=f"{rounded_num:.{self._digits}f}"
-        elif self._isspecial:
-            if abs(float(_value))>99 or abs(float(_value))<1:
-                rounded_num=round(_value, 1)
-                _value=f"{rounded_num:.1f}"
-            else:
-                rounded_num=round(_value, 0)
-                _value=f"{rounded_num:.0f}"
+        if re.match(r"^\d+(\.\d+)?$", _value):
+            print(self._digits,self._isspecial)
+            if self._digits is not None:
+                rounded_num=round(float(_value), self._digits)
+                _value=f"{rounded_num:.{self._digits}f}"
+            elif self._isspecial:
+                if abs(float(_value))>99 or abs(float(_value))<1:
+                    rounded_num=round(float(_value), 1)
+                    _value=f"{rounded_num:.1f}"
+                else:
+                    rounded_num=round(float(_value), 0)
+                    _value=f"{rounded_num:.0f}"
 
         if self._prefix is not None and float(_value)>=0:
             return f"{self._prefix}{_value}{self._suffix}"
@@ -177,6 +181,7 @@ class DotVal():
 
     # 打印数据时，将保留若干小数位，
     def to_fixed(self, digits=None):
+        self._isspecial=None
         self._digits=digits
         return self
 

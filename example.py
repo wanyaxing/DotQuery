@@ -11,7 +11,7 @@ if __name__ == '__main__':
                 ,db='test'
                 ,charset='utf8'
                 ,sqls_path=os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "./sqls/"))
-                ).val_if_none('-') # 在后续使用过程中，如果调用到不存在的字段，则使用默认值-
+                ).val_if_none('-').to_special()
 
     user_count=dq.user_count('2024-12-07')
 
