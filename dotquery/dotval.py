@@ -1,4 +1,5 @@
 import re
+from . import dottool
 
 
 class DotVal:
@@ -34,7 +35,7 @@ class DotVal:
         else:
             _value = f"{self._value}"
 
-        if re.match(r"^\d+(\.\d+)?$", _value):
+        if dottool.is_numeric(_value):
             if self._digits is not None:
                 rounded_num = round(float(_value), self._digits)
                 _value = f"{rounded_num:.{self._digits}f}"
@@ -139,14 +140,14 @@ class DotVal:
 
     # 占比
     # CONCAT(ROUND(分子/分母*100,2),'%')
-    def rateof(self, target, digits=2, suffix="%"):
+    def rateof(self, target, suffix="%"):
         if (
             target is None
-            or re.match(r"^\d+(\.\d+)?$", f"{target}") == None
+            or not dottool.is_numeric(f"{target}")
             or float(f"{target}") == 0
         ):
             return DotVal("-")
-        return self.copy().div(target).times(100).to_fixed(digits).suffix(suffix)
+        return self.copy().div(target).times(100).suffix(suffix)
 
     # 环比（差值占比）
     def diffof(self, target):
