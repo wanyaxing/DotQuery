@@ -140,6 +140,12 @@ class DotVal:
     # 占比
     # CONCAT(ROUND(分子/分母*100,2),'%')
     def rateof(self, target, digits=2, suffix="%"):
+        if (
+            target is None
+            or re.match(r"^\d+(\.\d+)?$", f"{target}") == None
+            or float(f"{target}") == 0
+        ):
+            return DotVal("-")
         return self.copy().div(target).times(100).to_fixed(digits).suffix(suffix)
 
     # 环比（差值占比）
