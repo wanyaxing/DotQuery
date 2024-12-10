@@ -1,3 +1,4 @@
+-- @default target_day=$[CURRENT_DATE]
 SELECT COUNT(1) AS `新注册用户`,
     MAX(IF(ULAST.`id` IS NOT NULL,1,0)) AS `是否包含最新用户`,
     COUNT(IF(`gender` = 'MALE', 1, NULL)) AS `男性用户`,

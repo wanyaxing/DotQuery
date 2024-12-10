@@ -52,3 +52,8 @@ if __name__ == "__main__":
     today_user = dq.today_user({"target_day": "2024-12-10", "gender": "FEMALE"})
     print("最后注册时间　　:{:>10}".format(today_user.最后注册时间))
     print("是否包含最新用户　　:{:>10}".format(today_user.是否包含最新用户))
+    
+    # 如果不传参数，.sql中的@default中的默认参数就会生效
+    today_user2 = dq.today_user()
+    print("最后注册时间　　:{:>10}".format(today_user.最后注册时间))
+    print("是否包含最新用户　　:{:>10}".format(today_user.是否包含最新用户))

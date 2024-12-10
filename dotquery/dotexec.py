@@ -42,7 +42,8 @@ class DotExec:
             result_dict = {
                 item.split("=")[0]: item.split("=")[1] for item in key_value_pairs
             }
-            params = result_dict.udate(params)
+            result_dict.update(params)
+            params = result_dict
 
         return dottool.replace_and_tuple(sql, params, self._sqls_path)
 
