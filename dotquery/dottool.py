@@ -1,10 +1,32 @@
+import os
 import re
 import datetime
 
 
-def replace_and_tuple(sql, params={}):
+def paramat_getall(s, key, default=[]):
+    pattern = re.compile(f"--\s*?@{key}\s+(.*)")
+    matches = re.findall(pattern, s)
+    if len(matches) > 0:
+        return matches
+    return default
+
+
+def paramat_get(s, key="", default=None):
+    matches = paramat_getall(s, key, [])
+    if len(matches) > 0:
+        return matches[0]
+    return default
+
+
+def replace_and_tuple(sql, params={}, sqls_path=None):
     new_sql = sql
     new_sql = _params_replace(new_sql, params)
+
+    if sqls_path is not None:
+        new_sql = _part_replace(new_sql, sqls_path)
+
+    new_sql = _params_replace(new_sql, params)
+
     new_sql = _constant_replace(new_sql)
 
     # 反向释放注释
@@ -40,6 +62,26 @@ def replace_and_tuple(sql, params={}):
     # return new_sql, tuple(args)
 
 
+def _part_replace(sql, sqls_path):
+    if not os.path.exists(sqls_path):
+        raise ValueError(f"sqls_path not found.")
+
+    pattern = r"\$<(.*?)>"
+    matches = re.findall(pattern, sql)
+    if not matches:
+        return sql
+
+    new_sql = sql
+    args = []
+    for match in matches:
+        part_path = f"{sqls_path}/{match}.part.sql"
+        if os.path.exists(part_path):
+            with open(part_path, "r") as f:
+                part = f.read()
+                new_sql = new_sql.replace(f"$<{match}>", part)
+    return new_sql
+
+
 def _params_replace(sql, params={}):
     new_sql = sql
     for key, value in params.items():
@@ -56,7 +98,6 @@ def _params_replace(sql, params={}):
             )
 
             def callback(match):
-                print(match.group())
                 is_valid = True
                 if match.group(1) == "(":
                     if is_valid and (

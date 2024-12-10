@@ -6,19 +6,20 @@ from . import dottool
 class DotExec:
     _conn = None
     _method = None
+    _sqls_path = None
     _default = None
     _digits = None
     _isspecial = False
 
-    def __init__(self, conn, method):
+    def __init__(self, conn, method, sqls_path):
         self._conn = conn
         self._method = method
+        self._sqls_path = sqls_path
 
     # 执行方法获得SQL并查询结果
     def run(self, *args, **kwargs):
         if type(self._method) is str:
             _result = self._sql_prepare(*args)
-            print(_result)
         else:
             try:
                 _result = self._method(*args, **kwargs)
@@ -32,10 +33,18 @@ class DotExec:
     def _sql_prepare(self, params={}):
         if os.path.exists(self._method):
             with open(self._method, "r") as f:
-                content = f.read()
+                sql = f.read()
         else:
-            content = self._method
-        return dottool.replace_and_tuple(content, params)
+            sql = self._method
+        defaultstr = dottool.paramat_get(sql, "default")
+        if defaultstr is not None:
+            key_value_pairs = defaultstr.split("&")
+            result_dict = {
+                item.split("=")[0]: item.split("=")[1] for item in key_value_pairs
+            }
+            params = result_dict.udate(params)
+
+        return dottool.replace_and_tuple(sql, params, self._sqls_path)
 
     # 返回的结果中，取第一条
     def query_single(self, sql):

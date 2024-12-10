@@ -52,7 +52,7 @@ class DotQuery:
 
         # 包装成DotExec对象的run方法（注意，不是run()，所以当执行时，等同于执行run)
         return (
-            DotExec(self._conn, target_method)
+            DotExec(self._conn, target_method, self._sqls_path)
             .val_if_none(self._default)
             .to_fixed(self._digits)
             .to_special(self._isspecial)
@@ -62,7 +62,7 @@ class DotQuery:
     def _get_sql_method(self, method_name):
         # 包装成DotExec对象的run方法（注意，不是run()，所以当执行时，等同于执行run)
         return (
-            DotExec(self._conn, f"{self._sqls_path}/{method_name}.sql")
+            DotExec(self._conn, f"{self._sqls_path}/{method_name}.sql", self._sqls_path)
             .val_if_none(self._default)
             .to_fixed(self._digits)
             .to_special(self._isspecial)
