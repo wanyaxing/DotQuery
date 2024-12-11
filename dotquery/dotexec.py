@@ -31,26 +31,29 @@ class DotExec:
         else:
             return self.query(_result)
 
+    # SQL可以进行二次处理
     def _sql_prepare(self, *args, **kwargs):
         if os.path.exists(self._method):
             with open(self._method, "r") as f:
                 sql = f.read()
         else:
             sql = self._method
+
         params = {}
+        defaultstr = dottool.paramat_get(sql, "default")
+        if defaultstr is not None:
+            params = {
+                item.split("=")[0]: item.split("=")[1] for item in defaultstr.split("&")
+            }
+
         for arg in args:
             if type(arg) is dict:
                 params.update(arg)
+            elif type(arg) is str:
+                params.update(
+                    {item.split("=")[0]: item.split("=")[1] for item in arg.split("&")}
+                )
         params.update(kwargs)
-
-        defaultstr = dottool.paramat_get(sql, "default")
-        if defaultstr is not None:
-            key_value_pairs = defaultstr.split("&")
-            result_dict = {
-                item.split("=")[0]: item.split("=")[1] for item in key_value_pairs
-            }
-            result_dict.update(params)
-            params = result_dict
 
         return dottool.replace_and_tuple(sql, params, self._sqls_path)
 
