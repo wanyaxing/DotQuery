@@ -49,6 +49,18 @@ class DotRes:
 
     def __getattr__(self, key):
         return self[key]
+    
+    def __len__(self):
+        return len(self._value)
+
+    # 支持遍历
+    def __iter__(self):
+        if isinstance(self._value, list):
+            for i in range(len(self._value)):
+                yield self[i]
+        elif isinstance(self._value, dict):
+            for key in self._value:
+                yield self[key]
 
     # 给当前对象下的对象，都指定默认值（包括错误调用（不含当前调用）））
     # 指定vin值，当查询结果的DotRes被外界调用时，此处可以指定默认值
