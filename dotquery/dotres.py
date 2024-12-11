@@ -49,26 +49,31 @@ class DotRes:
 
     def __getattr__(self, key):
         return self[key]
-    
+
     def __len__(self):
         return len(self._value)
 
     # 支持遍历
+    # 统一效果，仿dict，即list遍历默认也是出index
     def __iter__(self):
-        if isinstance(self._value, list):
-            for i in range(len(self._value)):
-                yield self[i]
-        elif isinstance(self._value, dict):
-            for key in self._value:
-                yield key
+        return self.keys()
 
+    # 可以出key,value队
     def items(self):
         if isinstance(self._value, list):
             for i in range(len(self._value)):
-                yield i,self[i]
+                yield i, self[i]
         elif isinstance(self._value, dict):
             for key in self._value:
-                yield key,self[key]
+                yield key, self[key]
+
+    def keys(self):
+        if isinstance(self._value, list):
+            for i in range(len(self._value)):
+                yield i
+        elif isinstance(self._value, dict):
+            for key in self._value:
+                yield key
 
     def values(self):
         if isinstance(self._value, list):

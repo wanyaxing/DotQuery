@@ -67,15 +67,28 @@ if __name__ == "__main__":
             ),
         )
     )
-    
-    print("today_user2的数量:{}".format(len(today_user2)))
-    
 
-    # 支持对结果DotRes对象进行遍历
-    for tuser in today_user2:
-        # 也支持对子对象进行遍历
-        # 这里会造成混乱的效果，因为list和dict对于for迭代的逻辑是不同的，前者迭代的是值，后者迭代的是key
+    print("today_user2的数量:{}".format(len(today_user2)))
+
+    print("支持对结果DotRes对象进行遍历")
+    for tkey in today_user2:
+        print(tkey)
+    for tidx, tkey in enumerate(today_user2):
+        print(tidx, type(tkey))
+    for tkey, tuser in today_user2.items():
+        print(tkey, type(tuser))
+
+    print("也支持给子对象进行遍历")
+    for tkey in today_user2[0]:
+        print(tkey)
+    for tidx, tkey in enumerate(today_user2[0]):
+        print(tidx, type(tkey))
+    for tkey, tuser in today_user2[0].items():
+        print(tkey, type(tuser))
+
+    print("打印数据")
+    for tkey, tuser in today_user2.items():
         for key in tuser:
-            print(key,tuser[key])
-        for key,value in tuser.items():
-            print(key,value)
+            print(key, tuser[key])
+        for key, value in tuser.items():
+            print(key, value)
