@@ -60,6 +60,22 @@ class DotRes:
                 yield self[i]
         elif isinstance(self._value, dict):
             for key in self._value:
+                yield key
+
+    def items(self):
+        if isinstance(self._value, list):
+            for i in range(len(self._value)):
+                yield i,self[i]
+        elif isinstance(self._value, dict):
+            for key in self._value:
+                yield key,self[key]
+
+    def values(self):
+        if isinstance(self._value, list):
+            for i in range(len(self._value)):
+                yield self[i]
+        elif isinstance(self._value, dict):
+            for key in self._value:
                 yield self[key]
 
     # 给当前对象下的对象，都指定默认值（包括错误调用（不含当前调用）））

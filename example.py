@@ -70,6 +70,12 @@ if __name__ == "__main__":
     
     print("today_user2的数量:{}".format(len(today_user2)))
     
+
     # 支持对结果DotRes对象进行遍历
     for tuser in today_user2:
-        print("id:{},注册时间:{}".format(tuser.性别,tuser.注册时间))
+        # 也支持对子对象进行遍历
+        # 这里会造成混乱的效果，因为list和dict对于for迭代的逻辑是不同的，前者迭代的是值，后者迭代的是key
+        for key in tuser:
+            print(key,tuser[key])
+        for key,value in tuser.items():
+            print(key,value)
