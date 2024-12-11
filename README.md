@@ -159,7 +159,69 @@ ORDER BY `id` DESC
 LIMIT 1
 ```
 
-## SQL中使用模版语法
+## 细节 
+### DotQuery
+
+| 初始化或方法 | 描述 |
+| --: | :-- |
+| DotQuery(host, user, passwd, port, db, charset="utf8", sqls_path=None) | 初始化一个dq实例，用于查询数据 |
+|   |   |
+| .example_method(arg1,arg2) | 可以请求sqls_path/下的example_method.py文件或example_method.sql文件中对应的SQL，返回值为DotRes实例 |
+|   |   |
+| :以下为穿透方法，会用于后续的DotVal实例，如果在此处指定值，后续就可以沿用了: |
+| .val_if_none(default) |  |
+| .to_fixed(digits=None) |  |
+| .to_special(isspecial=True) |  |
+
+
+### DotRes
+
+| 初始化或方法 | 描述 |
+| --: | :--: |
+| DotRes(value=[]) | 初始化一个DotRes实例，通常用于包装list或dict类型的数据，DotRes实例的特性会接近dict |
+|  |  |
+| .items() | 同dict用法 |
+| .keys() | 同dict用法 |
+| .values() | 同dict用法 |
+|  | :以下为穿透方法，会用于后续的DotVal实例，如果在此处指定值，后续就可以沿用了: |
+| .val_if_none(default) |  |
+| .to_fixed(digits=None) |  |
+| .to_special(isspecial=True) |  |
+
+
+### DotVal
+
+| 初始化或方法 | 描述 |
+| --: | :--: |
+| DotVal(value=any) | 初始化一个DotVal实例，通常用于包装数字或字符的数据，之所以包装成DotVal是为了实现数据的二次或多次转化 |
+|  |  |
+| .items() | 同dict用法 |
+| .keys() | 同dict用法 |
+| .values() | 同dict用法 |
+|  | :值处理: |
+| .rateof(target) | 计算当前值与目标值的占比，相当于：分子/分母*100 |
+| .diffof(target) | 计算当前值与目标值的环比，相当于：(self - target)/target*100 |
+|  | :值计算: |
+| .plus(num) | 在原值基础上-加法 |
+| .minus(num) | 在原值基础上-减法 |
+| .times(num) | 在原值基础上-乘法 |
+| .div(num) | 在原值基础上-除法 |
+| .mod(num) | 在原值基础上-取模 |
+| .pow(num) | 在原值基础上-取幂 |
+|  | :数学计算: |
+| +、-、*、/、%、^ | 两个数之间进行数学计算，会产生一个新值 |
+|  | :值判断: |
+|  < 、<= 、> 、>= 、== 、!= | :值判断: |
+|  .length() | 打印长度 |
+|  .indexof(substring, start=0) | 寻找是否包含其他字符，返回对应的位置 |
+|  | :打印时处理: |
+| .val_if_none(default) | 如果value值为None则可以指定默认值 |
+| .to_fixed(digits=None) | 打印数据时，将保留若干小数位， |
+| .to_special(isspecial=True) | 打印数据时，将根据数值动态决定小数点（如果>99or<1则取1位，否则0位） |
+| .suffix(suffix="") | 打印数据时，追加后缀字符 |
+| .prefix(prefix="") | 打印数字时，如果数字且非负数，则追加前缀字符 |
+| .raise_if_none(raiseIfNone='error') | 如果value值为None也没指定默认值，且指定了raiseIfNone则抛出异常 |
+
 
 
 

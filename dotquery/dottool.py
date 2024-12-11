@@ -76,7 +76,7 @@ def _part_replace(sql, sqls_path):
     for match in matches:
         part_path = f"{sqls_path}/{match}.part.sql"
         if os.path.exists(part_path):
-            with open(part_path, "r", encoding='utf-8') as f:
+            with open(part_path, "r", encoding="utf-8") as f:
                 part = f.read()
                 new_sql = new_sql.replace(f"$<{match}>", part)
     return new_sql

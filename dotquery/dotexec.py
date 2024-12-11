@@ -34,7 +34,7 @@ class DotExec:
     # SQL可以进行二次处理
     def _sql_prepare(self, *args, **kwargs):
         if os.path.exists(self._method):
-            with open(self._method, "r", encoding='utf-8') as f:
+            with open(self._method, "r", encoding="utf-8") as f:
                 sql = f.read()
         else:
             sql = self._method
