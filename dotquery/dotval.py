@@ -1,5 +1,6 @@
 import re
 from . import dottool
+import decimal
 
 
 class DotVal:
@@ -81,17 +82,17 @@ class DotVal:
 
     # 加法
     def plus(self, num):
-        self._value += float(f"{num}")
+        self._value = decimal.Decimal(f"{self._value}") + decimal.Decimal(f"{num}")
         return self
 
     # 减法
     def minus(self, num):
-        self._value -= float(f"{num}")
+        self._value = decimal.Decimal(f"{self._value}") - decimal.Decimal(f"{num}")
         return self
 
     # 乘法
     def times(self, num):
-        self._value *= float(f"{num}")
+        self._value = decimal.Decimal(f"{self._value}") * decimal.Decimal(f"{num}")
         return self
 
     # 除法
@@ -103,17 +104,17 @@ class DotVal:
             self._value = None
             return self.raise_if_none("错误：分母不可为0")
         else:
-            self._value /= float(f"{num}")
+            self._value = decimal.Decimal(f"{self._value}") / decimal.Decimal(f"{num}")
         return self
 
     # 取模
     def mod(self, num):
-        self._value %= float(f"{num}")
+        self._value = decimal.Decimal(f"{self._value}") % decimal.Decimal(f"{num}")
         return self
 
     # 取幂
     def pow(self, num):
-        self._value **= float(f"{num}")
+        self._value = decimal.Decimal(f"{self._value}") ** decimal.Decimal("{num}")
         return self
 
     # -------------魔术算数------------
