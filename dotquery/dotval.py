@@ -96,7 +96,14 @@ class DotVal:
 
     # 除法
     def div(self, num):
-        self._value /= float(f"{num}")
+        if not dottool.is_numeric(num):
+            self._value = None
+            return self.raise_if_none("错误：分母非数字")
+        elif float(f"{num}") == 0:
+            self._value = None
+            return self.raise_if_none("错误：分母不可为0")
+        else:
+            self._value /= float(f"{num}")
         return self
 
     # 取模
