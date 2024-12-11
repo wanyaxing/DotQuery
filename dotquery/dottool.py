@@ -194,6 +194,6 @@ def _constant_replace(sql):
 def is_numeric(*args):
     for s in args:
         # 判断是否只包含数字、小数点和负号
-        if not re.match(r"^[-+]?\d*\.?\d+$", s):
+        if not re.match(r"^[-+]?\d*\.?\d+$", f"{s}"):
             return False
     return True
