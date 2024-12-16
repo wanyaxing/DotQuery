@@ -23,7 +23,7 @@ class DotRes:
             value = self._value[key]
         else:
             # 特殊用法，当对list取键时，可以穿透取到list的第一个数据里的键
-            if isinstance(self._value, list) and key in self._value[0]:
+            if isinstance(self._value, list) and len(self._value) > 0 and key in self._value[0]:
                 value = self._value[0][key]
             else:
                 return (
