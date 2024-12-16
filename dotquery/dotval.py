@@ -85,6 +85,8 @@ class DotVal:
     def plus(self, num):
         if type(self._value)==type(num) or isinstance(num,int):
             self._value += num
+        elif isinstance(num,DotVal):
+            self._value += num._value
         else:
             self._value = decimal.Decimal(f"{self._value}") + decimal.Decimal(f"{num}")
         return self
@@ -93,6 +95,8 @@ class DotVal:
     def minus(self, num):
         if type(self._value)==type(num) or isinstance(num,int):
             self._value -= num
+        elif isinstance(num,DotVal):
+            self._value -= num._value
         else:
             self._value = decimal.Decimal(f"{self._value}") - decimal.Decimal(f"{num}")
         return self
@@ -101,6 +105,8 @@ class DotVal:
     def times(self, num):
         if type(self._value)==type(num) or isinstance(num,int):
             self._value *= num
+        elif isinstance(num,DotVal):
+            self._value *= num._value
         else:
             self._value = decimal.Decimal(f"{self._value}") * decimal.Decimal(f"{num}")
         return self
@@ -116,6 +122,8 @@ class DotVal:
         else:
             if type(self._value)==type(num) or isinstance(num,int):
                 self._value /= num
+            elif isinstance(num,DotVal):
+                self._value /= num._value
             else:
                 self._value = decimal.Decimal(f"{self._value}") / decimal.Decimal(f"{num}")
         return self
@@ -124,6 +132,8 @@ class DotVal:
     def mod(self, num):
         if type(self._value)==type(num) or isinstance(num,int):
             self._value %= num
+        elif isinstance(num,DotVal):
+            self._value %= num._value
         else:
             self._value = decimal.Decimal(f"{self._value}") % decimal.Decimal(f"{num}")
         return self
@@ -132,6 +142,8 @@ class DotVal:
     def pow(self, num):
         if type(self._value)==type(num) or isinstance(num,int):
             self._value **= num
+        elif isinstance(num,DotVal):
+            self._value **= num._value
         else:
             self._value = decimal.Decimal(f"{self._value}") ** decimal.Decimal(f"{num}")
         return self
