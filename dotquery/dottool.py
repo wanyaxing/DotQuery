@@ -80,7 +80,7 @@ def _params_replace(sql, params={}):
     for key, value in params.items():
         value = _constant_replace(str(value))
         new_sql = new_sql.replace(f"${{{key}}}", value)
-        if str(value).upper() not in ("0", "FALSE", "", "NONE", "NULL", "[]", "{}"):
+        if f"{value}".upper() not in ("0", "FALSE", "", "NONE", "NULL", "[]", "{}"):
             new_sql = re.sub(
                 f"/\*\[if {key}\]>(((?!\[if)[\s\S])*?)<\!\[endif\]\*/",
                 "\g<1>",
