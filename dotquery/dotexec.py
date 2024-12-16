@@ -1,6 +1,7 @@
 import os
 from .dotres import DotRes
 from . import dottool
+import time
 
 
 class DotExec:
@@ -23,6 +24,7 @@ class DotExec:
             # print(_result) # debug of sql
         else:
             try:
+                print("({:<30})".format(f'{args}'+f'{kwargs}'), end="", flush=True)
                 _result = self._method(*args, **kwargs)
             except ImportError:
                 raise ValueError(f"DotExec: try to run method failed.")
@@ -55,6 +57,8 @@ class DotExec:
                 )
         params.update(kwargs)
 
+        print("({:<30})".format(f'{params}'), end="", flush=True)
+
         return dottool.replace_and_tuple(sql, params, self._sqls_path)
 
     # 返回的结果中，取第一条
@@ -66,6 +70,8 @@ class DotExec:
 
     # 将查询的结果包装成DotRes的数组
     def query(self, sql, params=None):
+        start_time = time.time()
+        print(" ... ", end="", flush=True)
         cursor = self._conn.cursor()
         cursor.execute(sql, params)
         column_names = [description[0] for description in cursor.description]
@@ -75,6 +81,7 @@ class DotExec:
             # res.append(DotRes(row_dict).val_if_none(self._default))
             res.append(row_dict)
         cursor.close()
+        print("耗时:{:.2f}秒".format(time.time() - start_time))
         return (
             DotRes(res)
             .val_if_none(self._default)

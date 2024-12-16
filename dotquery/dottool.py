@@ -47,19 +47,12 @@ def replace_and_tuple(sql, params={}, sqls_path=None):
         "/\*\[elif [^>]*?\]>(((?!\[if)[\s\S])*?)<\!\[endif\]\*/", "", new_sql
     )
 
-    return new_sql
-    # pattern = r"\$\{(.*?)\}"
-    # matches = re.findall(pattern, sql)
-    # if not matches:
-    #     return sql, ()
+    pattern = r"\$\{(.*?)\}"
+    matches = re.findall(pattern, new_sql)
+    for match in matches:
+        print(f"注意：${{{match}}}未赋值，请检查SQL是否符合预期。")
 
-    # new_sql = sql
-    # args = []
-    # for match in matches:
-    #     if match in params:
-    #       new_sql = new_sql.replace(f"${{{match}}}", "%s")
-    #       args.append(params[match])
-    # return new_sql, tuple(args)
+    return new_sql
 
 
 def _part_replace(sql, sqls_path):
@@ -87,7 +80,7 @@ def _params_replace(sql, params={}):
     for key, value in params.items():
         value = _constant_replace(str(value))
         new_sql = new_sql.replace(f"${{{key}}}", value)
-        if f"{value}" != "0":
+        if str(value).upper() not in ("0", "FALSE", "", "NONE", "NULL", "[]", "{}"):
             new_sql = re.sub(
                 f"/\*\[if {key}\]>(((?!\[if)[\s\S])*?)<\!\[endif\]\*/",
                 "\g<1>",

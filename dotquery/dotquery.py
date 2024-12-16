@@ -25,7 +25,7 @@ class DotQuery:
         )
 
     def __getattr__(self, method_name):
-
+        print('开始处理：{:<30}'.format(method_name), end="", flush=True)
         if os.path.exists(f"{self._sqls_path}/{method_name}.py"):
             return self._get_model_method(method_name)
         elif os.path.exists(f"{self._sqls_path}/{method_name}.sql"):
