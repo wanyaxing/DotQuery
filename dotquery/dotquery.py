@@ -24,12 +24,24 @@ class DotQuery:
             host=host, user=user, passwd=passwd, port=port, db=db, charset=charset
         )
 
+    # 自定义浅拷贝逻辑
+    def copy(self):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        result.__dict__.update(self.__dict__)
+        return result
+
+
     def __getattr__(self, method_name):
         print('开始处理：{:<30}'.format(method_name), end="", flush=True)
         if os.path.exists(f"{self._sqls_path}/{method_name}.py"):
             return self._get_model_method(method_name)
         elif os.path.exists(f"{self._sqls_path}/{method_name}.sql"):
             return self._get_sql_method(method_name)
+        elif os.path.isdir(f"{self._sqls_path}/{method_name}"):
+            return self._get_dir_method(method_name)
+        else:
+            raise ValueError(f"{method_name} 无法识别.")
 
     def _get_model_method(self, method_name):
         # 动态导入文件.py模块
@@ -68,6 +80,12 @@ class DotQuery:
             .to_special(self._isspecial)
             .run
         )
+
+    def _get_dir_method(self, method_name):
+        # 包装成DotExec对象的run方法（注意，不是run()，所以当执行时，等同于执行run)
+        newdq = self.copy()
+        newdq._sqls_path = f"{self._sqls_path}/{method_name}"
+        return newdq
 
     # 指定vin值，当查询结果的DotDict被外界调用时，此处可以指定默认值
     def val_if_none(self, default):
