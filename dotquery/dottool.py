@@ -47,10 +47,10 @@ def replace_and_tuple(sql, params={}, sqls_path=None):
         "/\*\[elif [^>]*?\]>(((?!\[if)[\s\S])*?)<\!\[endif\]\*/", "", new_sql
     )
 
-    pattern = r"\$\{(.*?)\}"
+    pattern = r"\{(.*?)\}"
     matches = re.findall(pattern, new_sql)
     for match in matches:
-        print(f"注意：${{{match}}}未赋值，请检查SQL是否符合预期。")
+        print(f"注意：存在{{{match}}}未赋值，请检查SQL是否符合预期。")
 
     return new_sql
 
