@@ -28,15 +28,9 @@ class DotVal:
 
     # 魔法方法，核心方法，当格式化文本时调用此处
     def __format__(self, format_spec=None):
-        if self._value is None:
-            if self._default is not None:
-                _value = f"{self._default}"
-            elif self._raiseIfNone is not None:
-                raise ValueError(self._raiseIfNone)
-        else:
-            _value = f"{self._value}"
+        _value = self.value()
 
-        if dottool.is_numeric(_value) and not isinstance(self._value,(int)):
+        if dottool.is_numeric(_value) and not isinstance(_value,(int)):
             if self._digits is not None:
                 rounded_num = round(float(_value), self._digits)
                 _value = f"{rounded_num:.{self._digits}f}"
@@ -55,6 +49,21 @@ class DotVal:
 
         return _value.__format__(format_spec)
 
+    def value(self, default=None):
+        if self._value is None:
+            if default is not None:
+                return default
+            elif self._default is not None:
+                return self._default
+            elif self._raiseIfNone is not None:
+                raise ValueError(self._raiseIfNone)
+        return self._value
+
+    def number(self, default=None):
+        num = self.value()
+        if not dottool.is_numeric(num):
+            raise ValueError('此处无法取到数字值')
+        return num
 
     # ------------异常处理------------
 
@@ -83,32 +92,32 @@ class DotVal:
 
     # 加法
     def plus(self, num):
-        if type(self._value)==type(num) or isinstance(num,int):
-            self._value += num
+        if type(self.number())==type(num) or isinstance(num,int):
+            self._value = self.number() + num
         elif isinstance(num,DotVal):
-            self._value += num._value
+            self._value = self.number() + num.number()
         else:
-            self._value = decimal.Decimal(f"{self._value}") + decimal.Decimal(f"{num}")
+            self._value = decimal.Decimal(f"{self.number()}") + decimal.Decimal(f"{num}")
         return self
 
     # 减法
     def minus(self, num):
-        if type(self._value)==type(num) or isinstance(num,int):
-            self._value -= num
+        if type(self.number())==type(num) or isinstance(num,int):
+            self._value = self.number() - num
         elif isinstance(num,DotVal):
-            self._value -= num._value
+            self._value = self.number() - num.number()
         else:
-            self._value = decimal.Decimal(f"{self._value}") - decimal.Decimal(f"{num}")
+            self._value = decimal.Decimal(f"{self.number()}") - decimal.Decimal(f"{num}")
         return self
 
     # 乘法
     def times(self, num):
-        if type(self._value)==type(num) or isinstance(num,int):
-            self._value *= num
+        if type(self.number())==type(num) or isinstance(num,int):
+            self._value = self.number() * num
         elif isinstance(num,DotVal):
-            self._value *= num._value
+            self._value = self.number() * num.number()
         else:
-            self._value = decimal.Decimal(f"{self._value}") * decimal.Decimal(f"{num}")
+            self._value = decimal.Decimal(f"{self.number()}") * decimal.Decimal(f"{num}")
         return self
 
     # 除法
@@ -120,32 +129,32 @@ class DotVal:
             self._value = None
             return self.raise_if_none("错误：分母不可为0")
         else:
-            if type(self._value)==type(num) or isinstance(num,int):
-                self._value /= num
+            if type(self.number())==type(num) or isinstance(num,int):
+                self._value = self.number() / num
             elif isinstance(num,DotVal):
-                self._value /= num._value
+                self._value = self.number() / num.number()
             else:
-                self._value = decimal.Decimal(f"{self._value}") / decimal.Decimal(f"{num}")
+                self._value = decimal.Decimal(f"{self.number()}") / decimal.Decimal(f"{num}")
         return self
 
     # 取模
     def mod(self, num):
-        if type(self._value)==type(num) or isinstance(num,int):
-            self._value %= num
+        if type(self.number())==type(num) or isinstance(num,int):
+            self._value = self.number() % num
         elif isinstance(num,DotVal):
-            self._value %= num._value
+            self._value = self.number() % num.number()
         else:
-            self._value = decimal.Decimal(f"{self._value}") % decimal.Decimal(f"{num}")
+            self._value = decimal.Decimal(f"{self.number()}") % decimal.Decimal(f"{num}")
         return self
 
     # 取幂
     def pow(self, num):
-        if type(self._value)==type(num) or isinstance(num,int):
-            self._value **= num
+        if type(self.number())==type(num) or isinstance(num,int):
+            self._value = self.number() ** num
         elif isinstance(num,DotVal):
-            self._value **= num._value
+            self._value = self.number() ** num.number()
         else:
-            self._value = decimal.Decimal(f"{self._value}") ** decimal.Decimal(f"{num}")
+            self._value = decimal.Decimal(f"{self.number()}") ** decimal.Decimal(f"{num}")
         return self
 
     # -------------魔术算数------------
