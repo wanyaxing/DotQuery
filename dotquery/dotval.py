@@ -35,7 +35,7 @@ class DotVal:
                 rounded_num = round(float(_value), self._digits)
                 _value = f"{rounded_num:.{self._digits}f}"
             elif self._isspecial:
-                if abs(float(_value)) > 99 or abs(float(_value)) < 1:
+                if 99 < abs(float(_value)) < 100 or 0 < abs(float(_value)) < 1:
                     rounded_num = round(float(_value), 1)
                     _value = f"{rounded_num:.1f}"
                 else:
@@ -62,7 +62,10 @@ class DotVal:
     def number(self, default=None):
         num = self.value()
         if not dottool.is_numeric(num):
-            raise ValueError('此处无法取到数字值')
+            if num=='-':
+                return 0
+            else:
+                raise ValueError('此处无法取到数字值')
         return num
 
     # ------------异常处理------------
