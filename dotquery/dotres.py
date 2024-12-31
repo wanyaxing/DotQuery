@@ -18,7 +18,7 @@ class DotRes:
 
     def __getitem__(self, key):
         if key in self._value or (
-            isinstance(self._value, list) and key in range(len(self._value))
+            isinstance(self._value, list) and (key in range(len(self._value)) or isinstance(key,slice))
         ):
             value = self._value[key]
         else:
