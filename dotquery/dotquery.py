@@ -2,6 +2,7 @@ import os
 import importlib.util
 import pymysql
 from .dotexec import DotExec
+from .dotres import DotRes
 
 
 # 用于动态加载当前包下其他文件代码中的query方法
@@ -31,6 +32,8 @@ class DotQuery:
         result.__dict__.update(self.__dict__)
         return result
 
+    def empty(self):
+        return DotRes([])
 
     def __getattr__(self, method_name):
         print('开始处理：{:<30}'.format(method_name), end="", flush=True)
