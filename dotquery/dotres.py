@@ -28,6 +28,9 @@ class DotRes:
             else:
                 return (
                     DotVal(None)
+                    .val_if_none(self._default)
+                    .to_fixed(self._digits)
+                    .to_special(self._isspecial)
                     .raise_if_none(f" '{key}' not found")
                 )
         if isinstance(value, dict) or isinstance(value, list):
